@@ -54,7 +54,7 @@ def main(args):
             prompt = chat_formatting_function(messages, tokenizer, add_bos=False)
             prefix = "" if prompt[-1] in ["\n", " "] else " "
             return prompt + prefix + suffix
-            
+
         instruction = "Complete the following python function.\n\n\n"
         for example in test_data:
             if instructions_dict is not None:

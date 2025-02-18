@@ -1,0 +1,9 @@
+models:
+  - model: MergeMerge/3b-math
+    parameters:
+      weight: 0.5
+  - model: MergeMerge/3b-code
+    parameters:
+      weight: 0.5
+merge_method: linear
+dtype: bfloat16
