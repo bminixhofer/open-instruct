@@ -157,9 +157,16 @@ def main(args):
         outputs = [result["output"] for result in results]
 
     predictions = []
-    for output in outputs:
-        output = get_unnormalized_answer(output)
-        predictions.append(normalize_final_answer(output))
+    for raw_output in outputs:
+        output = get_unnormalized_answer(raw_output)
+
+        if output == "[invalidanswer]":
+            # try extracting from boxed
+            output = remove_boxed(last_boxed_only_string(raw_output))
+
+        output = normalize_final_answer(output)
+
+        predictions.append(output)
 
     predictions = [{
         "question": example["question"],
@@ -231,7 +238,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--max_num_examples", 
         type=int, 
-        default=None, 
+        default=100,
         help="maximum number of examples to evaluate."
     )
     parser.add_argument(

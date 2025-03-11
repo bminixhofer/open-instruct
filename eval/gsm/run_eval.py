@@ -164,7 +164,7 @@ def main(args):
             predictions.append(numbers[-1])
         else:
             predictions.append(output)
-        
+
     print("Calculating accuracy...")
     targets = [example["answer"] for example in test_data]
 
