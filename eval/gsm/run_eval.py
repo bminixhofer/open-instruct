@@ -17,7 +17,8 @@ from eval.utils import (
     check_and_upload_model_metadata
 )
 from eval.gsm.examplars import EXAMPLARS as GSM_EXAMPLARS
-
+from eval.MATH.utilities import last_boxed_only_string, remove_boxed
+from eval.MATH.minerva_utils import normalize_final_answer, get_unnormalized_answer, is_equiv
 
 exact_match = evaluate.load("exact_match")
 
@@ -156,20 +157,26 @@ def main(args):
         outputs = [result["output"] for result in results]
 
     predictions = []
-    for output in outputs:
-        # replace numbers like `x,xxx` with `xxxx`
-        output = re.sub(r"(\d),(\d)", r"\1\2", output)
-        numbers = re.findall(r"[-+]?\d*\.\d+|\d+", output)
-        if numbers:
-            predictions.append(numbers[-1])
-        else:
-            predictions.append(output)
+    for raw_output in outputs:
+        output = get_unnormalized_answer(raw_output)
+
+        if output == "[invalidanswer]":
+            # try extracting from boxed
+            output = remove_boxed(last_boxed_only_string(raw_output))
+
+        output = normalize_final_answer(output)
+        predictions.append(output)
 
     print("Calculating accuracy...")
     targets = [example["answer"] for example in test_data]
 
-    em_score = exact_match.compute(predictions=predictions, references=targets, ignore_case=True, ignore_punctuation=True)["exact_match"]
-    print(f"Exact match : {em_score}")
+    correct_list = []
+    for pred, target in zip(predictions, targets):
+        correct = 1 if is_equiv(pred, target) else 0
+        correct_list.append(correct)
+    accuracy = round(sum(correct_list) / len(correct_list), ndigits=4)
+
+    print(f"Exact match : {accuracy}")
 
     predictions = [{
         "question": example["question"],
@@ -184,12 +191,12 @@ def main(args):
     
     with open(os.path.join(args.save_dir, "metrics.json"), "w") as fout:
         json.dump({
-            "exact_match": em_score
+            "exact_match": accuracy
         }, fout, indent=4)
 
     if args.upload_to_hf is not None:
         # upload metrics to HF. Main metric is the accuracy
-        results = { "exact_match": em_score }
+        results = { "exact_match": accuracy }
         task_name = "oi_gsm8k_cot"
         primary_score = results["exact_match"]
         upload_results_to_hf(
