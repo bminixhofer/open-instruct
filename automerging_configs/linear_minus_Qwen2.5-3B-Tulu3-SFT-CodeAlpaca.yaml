@@ -1,0 +1,23 @@
+dtype: bfloat16
+merge_method: linear
+models:
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-MATH
+  parameters:
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Algebra
+  parameters:
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-GSM
+  parameters:
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Code
+  parameters:
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Instruction-Following
+  parameters:
+    weight: 1.0
+parameters:
+  normalize: true
+tokenizer:
+  pad_to_multiple_of: 64
+  source: union

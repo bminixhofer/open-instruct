@@ -1,0 +1,34 @@
+base_model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Instruction-Following
+dtype: bfloat16
+merge_method: della
+models:
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-MATH
+  parameters:
+    density: 0.1
+    epsilon: 0.05
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Algebra
+  parameters:
+    density: 0.1
+    epsilon: 0.05
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-GSM
+  parameters:
+    density: 0.1
+    epsilon: 0.05
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Code
+  parameters:
+    density: 0.1
+    epsilon: 0.05
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-CodeAlpaca
+  parameters:
+    density: 0.1
+    epsilon: 0.05
+    weight: 1.0
+parameters:
+  normalize: true
+tokenizer:
+  pad_to_multiple_of: 64
+  source: union
