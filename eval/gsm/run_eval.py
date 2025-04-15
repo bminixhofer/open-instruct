@@ -163,6 +163,13 @@ def main(args):
         if output == "[invalidanswer]":
             # try extracting from boxed
             output = remove_boxed(last_boxed_only_string(raw_output))
+        
+        if output == "":
+            # if still not found, use last number
+            proc_output = re.sub(r"(\d),(\d)", r"\1\2", raw_output)
+            numbers = re.findall(r"[-+]?\d*\.\d+|\d+", proc_output)
+            if numbers:
+                output = numbers[-1]
 
         output = normalize_final_answer(output)
         predictions.append(output)
