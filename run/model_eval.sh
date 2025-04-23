@@ -13,7 +13,7 @@ time ipython eval/gsm/run_eval.py -- \
     --data_dir=data/eval/gsm \
     --save_dir=logs/${MODEL_NAME}/gsm \
     --use_chat_format \
-    --additional_stop_sequence $'\n\nQuestion:' \
+    --additional_stop_sequence $'\n\nQuestion:' '<|/assistant|>' '<|/user|>' \
     --use_vllm 2>&1 | tee -a logs/${MODEL_NAME}/gsm.log
 
 time ipython eval/MATH/run_eval.py -- \
