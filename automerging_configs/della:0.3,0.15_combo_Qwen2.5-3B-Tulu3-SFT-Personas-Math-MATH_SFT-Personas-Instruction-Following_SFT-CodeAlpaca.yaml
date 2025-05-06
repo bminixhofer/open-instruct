@@ -2,7 +2,7 @@ base_model: Qwen/Qwen2.5-3B
 dtype: bfloat16
 merge_method: della
 models:
-- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Code
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-MATH
   parameters:
     density: 0.3
     epsilon: 0.15

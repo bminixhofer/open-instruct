@@ -2,7 +2,7 @@ base_model: Qwen/Qwen2.5-3B
 dtype: bfloat16
 merge_method: dare_ties
 models:
-- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Algebra
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-MATH
   parameters:
     density: 0.2
     weight: 1.0

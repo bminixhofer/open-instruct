@@ -1,0 +1,21 @@
+base_model: Qwen/Qwen2.5-3B
+dtype: bfloat16
+merge_method: dare_ties
+models:
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-GSM
+  parameters:
+    density: 0.2
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Code
+  parameters:
+    density: 0.2
+    weight: 1.0
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-CodeAlpaca
+  parameters:
+    density: 0.2
+    weight: 1.0
+parameters:
+  normalize: true
+tokenizer:
+  pad_to_multiple_of: 64
+  source: union

@@ -1,7 +1,7 @@
 dtype: bfloat16
 merge_method: linear
 models:
-- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-GSM
+- model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Math-MATH
   parameters:
     weight: 1.0
 - model: MergeMerge/Qwen2.5-3B-Tulu3-SFT-Personas-Code
