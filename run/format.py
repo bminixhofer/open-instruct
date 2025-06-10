@@ -1,4 +1,5 @@
 from glob import glob
+import json
 import pandas as pd
 
 if __name__ == "__main__":
@@ -7,37 +8,35 @@ if __name__ == "__main__":
 
     rows = []
 
-    for model_path in sorted(glob("logs/**/*")):
+    for model_path in sorted(glob("logs/automerging_outputs_combo/*")):
         if not "automerging_outputs" in model_path or "della" in model_path:
             continue
 
         print(model_path)
-        gsm_score = float(open(f"{model_path}/gsm.log").readlines()[-1].split(":")[-1].strip())
+        gsm_score = json.load(open(f"{model_path}/gsm/metrics.json"))["exact_match"]
         print(gsm_score)
+
         try:
-            humaneval_score = float(open(f"{model_path}/humaneval.log").readlines()[-1].split(":")[-1].strip().rstrip("}"))
+            humaneval_score = json.load(open(f"{model_path}/humaneval/metrics.json"))["pass@1"]
         except:
             humaneval_score = None
         print(humaneval_score)
+
         try:
-            mbpp_score = float(open(f"{model_path}/mbpp.log").readlines()[-1].split(":")[-1].strip().rstrip("}"))
+            mbpp_score = json.load(open(f"{model_path}/mbpp/metrics.json"))["pass@1"]
         except:
             mbpp_score = None
         print(mbpp_score)
 
-        for line in open(f"{model_path}/MATH.log").readlines():
-            if "Accuracy:" in line:
-                math_score = float(line.split(":")[-1].strip())
-                break
+        try:
+            math_score = json.load(open(f"{model_path}/MATH/metrics.json"))["accuracy"]
+        except:
+            math_score = None
 
         print(math_score)
 
         try:
-            ifeval_lines = open(f"{model_path}/ifeval.log").readlines()
-            for i, line in enumerate(ifeval_lines):
-                if "Running loose evaluation..." in line:
-                    ifeval_score = float(ifeval_lines[i + 1].split(":")[-1].strip()[3:])
-                    break
+            ifeval_score = json.load(open(f"{model_path}/ifeval/metrics.json"))["loose"]["Accuracy"]
         except:
             ifeval_score = None
 
@@ -52,5 +51,5 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(rows, columns=header)
     # high max colwidth
-    with pd.option_context('display.max_colwidth', 100):
+    with pd.option_context('display.max_colwidth', 200, 'display.max_columns', 10, 'display.max_rows', 200):
         print(df)

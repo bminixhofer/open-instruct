@@ -101,7 +101,7 @@ if __name__ == "__main__":
                 yaml.dump(config, f)
 
         for combo in combinations(args.fts, 3):
-            model_names = [args.fts[0].split('/')[1]]
+            model_names = [combo[0].split('/')[1]]
 
             for ft in combo[1:]:
                 name_piece = ft.split('/')[1]
